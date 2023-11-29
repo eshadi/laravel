@@ -9,7 +9,7 @@ class Catalog extends Model
 {
     use HasFactory;
 
-    public function book()
+    public function books()
     {
         return $this->hasMany('App\Models\Book','catalog_id');
     }
