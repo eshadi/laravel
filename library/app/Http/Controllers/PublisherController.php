@@ -12,10 +12,10 @@ class PublisherController extends Controller
      */
     public function index()
     {
-        $publishers = Publisher::with('book')->get();
+        $publishers = Publisher::with('books')->get();
 
-        return $publishers;
-        return view('admin.publisher.index');
+        // return $publishers;
+        return view('admin.publisher.index', compact('publishers'));
     }
 
     /**
@@ -23,7 +23,7 @@ class PublisherController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.publisher.create');
     }
 
     /**
@@ -31,7 +31,20 @@ class PublisherController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request,[
+            'name'=> ['required|max:255|unique:publishers'], 
+            'email'=> ['required|email'], 
+            'phone_number'=> ['required|numeric'], 
+            'address' => ['required'],
+        ]);
+
+        // $publisher = new Catalog;
+        // $publisher->name = $request->name;
+        // $publisher->save();
+
+        Publisher::create($request->all());
+
+        return redirect('publishers');
     }
 
     /**
@@ -47,7 +60,7 @@ class PublisherController extends Controller
      */
     public function edit(Publisher $publisher)
     {
-        //
+        return view('admin.publisher.edit', compact('publisher'));
     }
 
     /**
@@ -55,7 +68,14 @@ class PublisherController extends Controller
      */
     public function update(Request $request, Publisher $publisher)
     {
-        //
+        $this->validate($request,[
+            'name', 'email', 'phone_number', 'address' => ['required'],
+        ]);
+
+       
+        $publisher->update($request->all());
+
+        return redirect('publishers');
     }
 
     /**
@@ -63,6 +83,8 @@ class PublisherController extends Controller
      */
     public function destroy(Publisher $publisher)
     {
-        //
+        $publisher->delete();
+        
+        return redirect('publishers');
     }
 }
