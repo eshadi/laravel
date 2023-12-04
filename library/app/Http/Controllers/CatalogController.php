@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 
 class CatalogController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      */
@@ -33,6 +37,7 @@ class CatalogController extends Controller
     {
         $this->validate($request,[
             'name' => ['required'],
+            // 'name' => ['required|max:255']
         ]);
 
         // $catalog = new Catalog;
@@ -83,7 +88,7 @@ class CatalogController extends Controller
     public function destroy(Catalog $catalog)
     {
         $catalog->delete();
-        
+
         return redirect('catalogs');
     }
 }
