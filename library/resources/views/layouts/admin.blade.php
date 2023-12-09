@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="{{ asset('assets/dist/css/adminlte.min.css')}}">
   <!-- overlayScrollbars -->
   <link rel="stylesheet" href="{{ asset('assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css')}}">
-  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  
   @yield('css')
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -220,8 +220,10 @@
 <script src="{{ asset('assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js')}}"></script>
 <!-- AdminLTE App -->
 <script src="{{ asset('assets/dist/js/adminlte.js')}}"></script>
-
+<!-- cdn -->
+<script src="https://unpkg.com/vue@3"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
 @yield('js')
 
 </body>

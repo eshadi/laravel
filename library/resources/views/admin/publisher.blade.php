@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('header','Author')
+@section('header','Publisher')
 
 @section('css')
 
@@ -11,7 +11,7 @@
           <div class="col-md-12">
             <div class="card">
               <div class="card-header">
-                <a href="#" @click="addData()" class="btn btn-sm btn-primary pull-right">Create New Author</a>
+                <a href="#" @click="addData()" class="btn btn-sm btn-primary pull-right">Create New Publisher</a>
               </div>
               <!-- /.card-header -->
               <div class="card-body p-0">
@@ -27,16 +27,16 @@
                       </tr>
                   </thead>
                   <tbody>
-                  	@foreach($authors as $key => $author)
+                  	@foreach($publishers as $key => $publisher)
                     <tr>
                       <td>{{ $key+1 }}</td>
-                      <td>{{ $author->name }}</td>
-                      <td>{{ $author->email }}</td>
-                      <td>{{ $author->phone_number }}</td>
-                      <td>{{ $author->address }}</td>
+                      <td>{{ $publisher->name }}</td>
+                      <td>{{ $publisher->email }}</td>
+                      <td>{{ $publisher->phone_number }}</td>
+                      <td>{{ $publisher->address }}</td>
                       <td class="text-center">
-                        <a href="#" @click="editData({{ $author }})" class="btn btn-warning btn-sm">Edit</a>
-                        <a href="#" @click="deleteData({{ $author->id }})" class="btn btn-danger btn-sm">Delete</a>
+                        <a href="#" @click="editData({{ $publisher }})" class="btn btn-warning btn-sm">Edit</a>
+                        <a href="#" @click="deleteData({{ $publisher->id }})" class="btn btn-danger btn-sm">Delete</a>
                       </td>
                     </tr>
                     @endforeach
@@ -53,7 +53,7 @@
             <form method="post" :action="actionUrl" autocomplete="off">
               <div class="modal-header">
 
-                <h4 class="modal-title">Author</h4>
+                <h4 class="modal-title">Publisher</h4>
 
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -98,7 +98,7 @@
         el: '#controller',
         data: {
           data : {},
-          actionUrl : '{{ url('authors') }}',
+          actionUrl : '{{ url('publishers') }}',
           editStatus : false
         },
         mounted: function (){
@@ -107,18 +107,18 @@
         methods: {
           addData() {
             this.data = {};
-            this.actionUrl = '{{ url('authors') }}';
+            this.actionUrl = '{{ url('publishers') }}';
             this.editStatus = false;
             $('#modal-default').modal();
           },
           editData(data) {
             this.data = data;
-            this.actionUrl = '{{ url('authors')}}'+'/'+data.id;
+            this.actionUrl = '{{ url('publishers')}}'+'/'+data.id;
             this.editStatus = true;
             $('#modal-default').modal();
           },
           deleteData(id) {
-            this.actionUrl = '{{ url('authors')}}'+'/'+id;
+            this.actionUrl = '{{ url('publishers')}}'+'/'+id;
             if (confirm("are you sure?")) {
               axios.post(this.actionUrl, {_method: 'DELETE'}).then(response => {
                 location.reload();
