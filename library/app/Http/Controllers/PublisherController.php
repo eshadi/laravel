@@ -16,7 +16,8 @@ class PublisherController extends Controller
      */
     public function index()
     {
-        $publishers = Publisher::with('books')->get();
+        // $publishers = Publisher::with('books')->get();
+        $publishers = Publisher::all();
 
         // return $publishers;
         return view('admin.publisher', compact('publishers'));
