@@ -7,15 +7,24 @@ use Illuminate\Http\Request;
 
 class MemberController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $members = Member::with('user')->get();
+        return view('admin.member');
+    }
 
-        return $members;
-        return view('admin.member.index');
+    public function api()
+    {
+        $members = Member::all();
+        $datatables = datatables()->of($members)->addIndexColumn();
+
+        return $datatables->make(true);
     }
 
     /**

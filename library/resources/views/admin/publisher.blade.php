@@ -29,22 +29,7 @@
                       <th class="text-center">Address</th>
                       <th class="text-center">Action</th>
                       </tr>
-                  </thead>
-                  <tbody>
-                  	@foreach($publishers as $key => $publisher)
-                    <tr>
-                      <td class="text-center">{{ $key+1 }}</td>
-                      <td>{{ $publisher->name }}</td>
-                      <td>{{ $publisher->email }}</td>
-                      <td class="text-center">{{ $publisher->phone_number }}</td>
-                      <td>{{ $publisher->address }}</td>
-                      <td class="text-center">
-                        <a href="#" @click="editData({{ $publisher }})" class="btn btn-warning btn-sm">Edit</a>
-                        <a href="#" @click="deleteData({{ $publisher->id }})" class="btn btn-danger btn-sm">Delete</a>
-                      </td>
-                    </tr>
-                    @endforeach
-                  </tbody>
+                  </thead>                  
                 </table>
               </div>
             </div>
@@ -54,7 +39,7 @@
     <div class="modal fade" id="modal-default">
         <div class="modal-dialog">
           <div class="modal-content">
-            <form method="post" :action="actionUrl" autocomplete="off">
+            <form method="post" :action="actionUrl" autocomplete="off" @submit="submitForm($event, data.id)">
               <div class="modal-header">
 
                 <h4 class="modal-title">Publisher</h4>
@@ -110,47 +95,26 @@
 <script src="{{ asset('assets/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
 <script src="{{ asset('assets/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
 <script type="text/javascript">
-  $(function () {
-    $("#datatable").DataTable();
-      
-  });
+  var actionUrl = '{{ url('publishers') }}';
+  var apiUrl = '{{ url('api/publishers') }}';
+
+  var columns = [
+    {data: 'DT_RowIndex', class: 'text-center', orderable: true},
+    {data: 'name', class: 'text-center', orderable: true},
+    {data: 'email', class: 'text-center', orderable: true},
+    {data: 'phone_number', class: 'text-center', orderable: true},
+    {data: 'address', class: 'text-center', orderable: true},
+    {render: function (index, row, data, meta) {
+        return `
+          <a href="#" class="btn btn-warning btn-sm" onclick="controller.editData(event, ${meta.row})">
+            Edit
+          </a>
+          <a class="btn btn-danger btn-sm" onclick="controller.deleteData(event, ${data.id})">
+            Delete
+          </a>`;
+      },
+      orderable: false, width: '200px', class: 'text-center'},
+  ];
 </script>
-
-<!-- CRUD Vue js -->
-  <script type="text/javascript">
-      var controller = new Vue({
-        el: '#controller',
-        data: {
-          data : {},
-          actionUrl : '{{ url('publishers') }}',
-          editStatus : false
-        },
-        mounted: function (){
-
-        },
-        methods: {
-          addData() {
-            this.data = {};
-            this.actionUrl = '{{ url('publishers') }}';
-            this.editStatus = false;
-            $('#modal-default').modal();
-          },
-          editData(data) {
-            this.data = data;
-            this.actionUrl = '{{ url('publishers')}}'+'/'+data.id;
-            this.editStatus = true;
-            $('#modal-default').modal();
-          },
-          deleteData(id) {
-            this.actionUrl = '{{ url('publishers')}}'+'/'+id;
-            if (confirm("are you sure?")) {
-              axios.post(this.actionUrl, {_method: 'DELETE'}).then(response => {
-                location.reload();
-              });
-            }
-
-          }
-        }
-      });
-  </script>
+<script src="{{ asset('js/data.js') }}"></script>
 @endsection
