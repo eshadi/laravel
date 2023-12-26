@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Catalog;
+use App\Models\Author;
+use App\Models\Publisher;
 use App\Models\Book;
 use Illuminate\Http\Request;
 
@@ -12,10 +15,16 @@ class BookController extends Controller
      */
     public function index()
     {
-        $books = Book::with('publisher', 'author', 'catalog')->get();
+        $publishers = Publisher::all();
+        $authors = Author::all();
+        $catalogs = Catalog::all();
+        return view('admin.book', compact('publishers', 'authors', 'catalogs'));
+    }
+    public function api()
+    {
+        $book = Book::all();
 
-        return $books;
-        return view('admin.book.index');
+        return json_encode($book);
     }
 
     /**
