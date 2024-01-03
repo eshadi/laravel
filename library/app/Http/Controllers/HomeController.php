@@ -134,7 +134,33 @@ class HomeController extends Controller
         
                         
             
-        // return $data5;                
-        return view('home');
+        // return $data5;
+        $total_member = Member::count();
+        $total_book = Book::count();
+        $total_transaction = Transaction::whereMonth('date_start', date('m'))->count();
+        $total_publisher = Publisher::count();
+
+        $data_donut = Book::select(DB::raw("COUNT(id_publisher) as total"))->groupBy('id_publisher')->orderBy('id_publisher', 'asc')->pluck('total');
+        $data_donut = Publisher::orderBY('publishers.id', 'asc')->join('books', 'books.id_publisher', '=', 'publishers.id')->groupBy('name_publisher')->pluck('name_publisher');
+
+        $label_bar = ['transactions', 'transaction_details']
+        $data_bar = [];
+
+        foreach ($label_bar as $key => $value) {
+                            $data_bar[$key]['label'] = $label_bar[$key];
+                            $data_bar[$key]['backgroundColor'] = $key == 0 ? 'rgba(60,141,188,0.9)' : 'rgba(210, 214, 222, 1)';
+                            $data_month = [];
+
+                            foreach (range(1,12) as $month) {
+                                if ($key == 0) {
+                                    $data_month[] = Transaction::select(DB::raw("COUNT(*) as total"))->whereMonth('date_start', $month)->first()->total;    
+                                } else {
+                                    $data_month[] = Transaction::select(DB::raw("COUNT(*) as total"))->whereMonth('date_end', $month)->first()->total;
+                                }                        
+                            }
+
+                            $data_bar[$key]['data'] = $data_month; 
+                        }                
+        return view('home', compact('total_book', 'total_member', 'total_transactions', 'total_publisher', 'data_donut', 'label_donut', 'data_bar'));
     }
 }
